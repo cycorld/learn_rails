@@ -1,0 +1,11 @@
+<h1> contact 컨트롤러 index 액션의 뷰파일입니다.</h1>
+
+<%= link_to '새 전화번호 등록', new_contact_path %>
+
+<h3>전화번호부 목록</h3>
+
+<% @contacts.each do |contact| %>
+name : <%= contact.name %><br>
+gender : <%= contact.gender %><br>
+phone_number : <%= contact.phone_number %><br>
+<% end %>
