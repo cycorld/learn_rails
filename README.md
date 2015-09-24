@@ -41,8 +41,8 @@ Ruby On Rails 제대로된 작업을 시작해보도록 합니다. 먼저 MVC �
 다음과 같이 컨트롤러 파일이 생겼습니다. `app/controllers/contact_controller.rb`  
 ```ruby
 class ContactController < ApplicationController
-   def index #추가
-   end       #추가
+   def index 
+   end       
 end
 ```
 위와 같이 코드를 수정합니다. contact_controller 에 index 라는 액션을 생성했습니다.  
@@ -75,7 +75,7 @@ Ruby On Rails 에서 routes.rb 파일의 역할은 특정 경로를 컨트롤러
 
 ```ruby
 Rails.application.routes.draw do
-  get '/' => 'contact#index' #추가
+  get '/' => 'contact#index' 
   ...
   ...
   ...
@@ -131,9 +131,9 @@ Contact 모델을 만들면서 생긴 것은 모델 파일(`app/models/contact.r
 class CreateContacts < ActiveRecord::Migration
   def change
     create_table :contacts do |t|
-      t.string :name         #추가
-      t.string :gender       #추가
-      t.string :phone_number #추가
+      t.string :name         
+      t.string :gender       
+      t.string :phone_number 
       t.timestamps null: false
     end
   end
@@ -160,7 +160,7 @@ end
 ```ruby
 Rails.application.routes.draw do
   get '/' => 'contact#index'
-  resources :contact #추가
+  resources :contact 
   ...
   ...
   ...
@@ -196,12 +196,12 @@ class ContactController < ApplicationController
     def index
     end
     
-    def new     #추가
-       @contact = Contact.new #추가
-    end        #추가
+    def new     
+       @contact = Contact.new 
+    end        
     
-    def create #추가
-    end        #추가
+    def create 
+    end        
 end
 ```
 - index 액션  : Contact 테이블의 정보를 보여줄 페이지.  
@@ -248,10 +248,10 @@ class ContactController < ApplicationController
     end
     
     def create
-        name = params[:contact][:name] #추가
-        gender = params[:contact][:gender] #추가
-        phone_number = params[:contact][:phone_number] #추가
-        Contact.create(name: name, gender: gender, phone_number: phone_number) #추가
+        name = params[:contact][:name] 
+        gender = params[:contact][:gender] 
+        phone_number = params[:contact][:phone_number] 
+        Contact.create(name: name, gender: gender, phone_number: phone_number) 
         redirect_to '/'
     end
 end
@@ -262,14 +262,14 @@ end
 ```ruby
 <h1> contact 컨트롤러 index 액션의 뷰파일입니다.</h1>
 
-<%= link_to '새 전화번호 등록', new_contact_path %> #추가
+<%= link_to '새 전화번호 등록', new_contact_path %> 
 
-<h3>전화번호부 목록</h3> #추가
+<h3>전화번호부 목록</h3> 
 
-<% @contacts.each do |contact| %> #추가
-name : <%= contact.name %><br> #추가
-gender : <%= contact.gender %><br> #추가
-phone_number : <%= contact.phone_number %><br> #추가
-<% end %> #추가
+<% @contacts.each do |contact| %> 
+name : <%= contact.name %><br> 
+gender : <%= contact.gender %><br> 
+phone_number : <%= contact.phone_number %><br> 
+<% end %> 
 ```
 each do 반복문을 이용해서 controller 에서 선언한 @contacts 변수를 이용하여 모든 데이터를 뿌려줍니다.
