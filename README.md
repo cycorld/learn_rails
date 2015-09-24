@@ -226,7 +226,8 @@ end
 form_for 라는 rails helper 을 이용해여 만듭니다.  
 위 코드는 다음과 같은 html 코드를 생성해냅니다.
 ```html
-<form class="new_contact" id="new_contact" action="/contact" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓">
+<form class="new_contact" id="new_contact" action="/contact" accept-charset="UTF-8" method="post">
+ <input name="utf8" type="hidden" value="✓">
  <input type="hidden" name="authenticity_token" value="uD3eyX6maEHkSKf4wHeRKS0xvummBe72n2Rzfn2Jks3kd20ccvAmsxRmEmJif7ID9Mh2CtsL9SlVX6Cj4Uaqkg==">
  <label>Name: </label>
  <input type="text" name="contact[name]" id="contact_name"><br>
@@ -260,7 +261,7 @@ end
 전송된 데이터로 Contact 테이블의 데이터를 생성하고, 그 후에 '/' 경로로 보냅니다.
 
 ### index 액션에서 Contact 테이블의 모든 데이터 보여주기
-```ruby
+```html_ruby
 <h1> contact 컨트롤러 index 액션의 뷰파일입니다.</h1>
 
 <%= link_to '새 전화번호 등록', new_contact_path %> 
