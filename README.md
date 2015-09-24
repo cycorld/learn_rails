@@ -226,7 +226,8 @@ end
 form_for 라는 rails helper 을 이용해여 만듭니다.  
 위 코드는 다음과 같은 html 코드를 생성해냅니다.
 ```html
-<form class="new_contact" id="new_contact" action="/contact" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="uD3eyX6maEHkSKf4wHeRKS0xvummBe72n2Rzfn2Jks3kd20ccvAmsxRmEmJif7ID9Mh2CtsL9SlVX6Cj4Uaqkg==">
+<form class="new_contact" id="new_contact" action="/contact" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓">
+ <input type="hidden" name="authenticity_token" value="uD3eyX6maEHkSKf4wHeRKS0xvummBe72n2Rzfn2Jks3kd20ccvAmsxRmEmJif7ID9Mh2CtsL9SlVX6Cj4Uaqkg==">
  <label>Name: </label>
  <input type="text" name="contact[name]" id="contact_name"><br>
  <label>Gender: </label>
