@@ -32,7 +32,7 @@ MVC 패턴은 Model, View Controller 를 의미하며 각자의 역할은 다음
 
 ### 컨트롤러 생성하기
 Ruby On Rails 제대로된 작업을 시작해보도록 합니다. 먼저 MVC 패턴 중 컨트롤러를 생성하도록 하겠습니다. 명령어의 형식은 다음과 같습니다.  
-`rails g controller ControllerName(임의의 이름)'  
+`rails g controller ControllerName(임의의 이름)`
 
 저희가 만들어볼 프로젝트는 전화번호부이기 때문에 컨트롤러의 이름을 **Contact**라고 짓겠습니다. 따라서 명령어는 다음과 같습니다.  
 `rails g controller contact`
@@ -65,7 +65,7 @@ html 이 아닌 html.erb 파일라는 차이점이 있다는 것을 일단은 �
 Ruby On Rails 에서는 layout 파일이 별도로 존재하기 때문에 사용하지 않아도 됩니다.
 layout 파일의 위치는 다음과 같습니다. `app/views/layout/application.html.erb`
 
-※ 자세히 설명하지는 않겠지만, `<%= yield %>` 라는 코드가 있는 곳에 `index.html.erb` 파일의 내용이 삽입되게 됩니다.
+※ 아직 자세히 설명하지는 않겠지만, `<%= yield %>` 라는 코드가 있는 곳에 `index.html.erb` 파일의 내용이 삽입되게 됩니다.
 
 ### 경로 명시해주기
 컨트롤러를 만들고, index 액션을 만들었습니다. 그리고 그에 대응하는 index.html.erb 라는 뷰파일 또한 만들었습니다.  
@@ -206,6 +206,7 @@ end
 ```
 - index 액션  : Contact 테이블의 정보를 보여줄 페이지.  
 - new 액션    : Contact 데이터들을 입력할 페이지.
+ - Contact.new(형식 : 모델명.new) 는 테이블의 새로운 데이터를 만들 때 사용하는 메소드입니다. name, gender, phone_number 등의 값들은 비어져 있는 상태입니다. 
 - create 액션 : 새로운 Contact 데이터를 생성할 페이지.
 
 ### new page 만들기
