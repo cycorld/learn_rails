@@ -212,7 +212,7 @@ end
 ### new page 만들기
 ※ new 액션의 경로는 resources 에 의해서 정의된 대로 '/contact/new' 입니다.
 일단 뷰파일이 없으니 새로 만들어 주도록 합니다. (`app/views/contact/new.html.erb`)  
-```html_ruby
+```erb
 <h1>전화번호 추가</h1>
 <%= form_for @contact, url: {action: "create"} do |f| %>
  <label>Name: </label>
@@ -262,7 +262,7 @@ end
 전송된 데이터로 Contact 테이블의 데이터를 생성하고, 그 후에 '/' 경로로 보냅니다.
 
 ### index 액션에서 Contact 테이블의 모든 데이터 보여주기
-```html_ruby
+```erb
 <h1> contact 컨트롤러 index 액션의 뷰파일입니다.</h1>
 
 <%= link_to '새 전화번호 등록', new_contact_path %> 
