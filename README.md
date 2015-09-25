@@ -276,3 +276,7 @@ phone_number : <%= contact.phone_number %><br>
 <% end %> 
 ```
 each do 반복문을 이용해서 controller 에서 선언한 @contacts 변수를 이용하여 모든 데이터를 뿌려줍니다.
+
+###과제
+
+토커봇 : https://github.com/kwangkuk0821/talker - CR(Create, Read)
