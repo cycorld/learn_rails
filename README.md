@@ -121,7 +121,7 @@ Rails.application.routes.draw do
 - 나름의 이름을 정하여 3개의 페이지를 더 만들어 봅시다.
 - home#index 페이지와 home#about 페이지, 그리고 나머지 3개의 페이지를 편하게 이동할 수 있도록 `a` 태그를 이용해 메뉴를 만들어 봅시다. (힌트 : layout을 이용해보세요)
 
-## 스캐폴드Scaffold를 이용해 간단히 그룹별 전화번호부 만들어 보기
+## 스캐폴드Scaffold를 이용해 간단히 전화번호부 만들어 보기
 
 ### 스캐폴드Scaffold ?
 
@@ -132,26 +132,29 @@ CRUD 란 Create, Read, Update, Delete 의 약자로 데이터베이스 만들고
 
 ### 스캐폴드 생성하기
 
-`rails g scaffold Groups title:string writer:string`
+`rails g scaffold Contacts name:string phone_number:string`  
+명령어를 통해 스캐폴드를 생성합니다.  
+name과 phone_number에는 255자 이내의 문자열을 담을 것이기 때문에 string 타입을 주었습니다.  
 
-처음으로 만들어 볼 것은 그룹별 전화번호부를 만들 수 있도록 `title` 컬럼(열)과 `writer` 컬럼(열)을 CRUD 할 수 있는 스캐폴드를 만들어 보겠습니다.
+### Contacts 데이터베이스 설계하기
 
-**데이터베이스 구조 설계**
+설계할 Contact 테이블은 다음과 같은 요소를 가지고 있어야 합니다.  
+이름(name)과 전화번호(phone_numer) 입니다.  
 
-| id  | title      | writer     |
-| --- | ---------- | ---------- |
-| 1   | 가족       | 최○○       |
-| 2   | 친구       | 최○○       |
-| 3   | 수업       | 김○○       |
+| id  | name      | phone_number   |
+| --- | --------- | -------------- |
+| 1   | 김○○      | 010-1234-5678  |
+| 2   | 이○○      | 010-1111-2222  |
+| 3   | 박○○      | 010-2222-3333  |
 
-* 여기서 id는 자동으로 부여 됩니다. 하나의 데이터가 입력 될 때마다 1 씩 증가하면서 고유의 번호가 매겨지게 되며, id 값은 Groups 모델에 있어서 주민등록번호와 같은 존재입니다. 레일즈에서 생성되는 모든 모델에는 기본적으로 id 컬럼이 부여됩니다.  
+* 여기서 id는 자동으로 부여 됩니다. 하나의 데이터가 입력 될 때마다 1 씩 증가하면서 고유의 번호가 매겨지게 되며, id 값은 Contact 모델에 있어서 주민등록번호와 같은 존재입니다. 레일즈에서 생성되는 모든 모델에는 기본적으로 id 컬럼이 부여됩니다.  
 
 ### 스캐폴드로 생성된 파일들
 
-Groups 모델을 만들면서 생긴 것은 모델 파일(`app/models/groups.rb`) 과 마이그레이션 파일(`db/migrate/dateinfo...create_groups.rb`), 컨트롤러(`app/controllers/groups_controller.rb`), 그리고 뷰(`app/views/groups/index|show|new|edit.html.erb 등등`) 입니다.
-또한, `config/routes.rb` 파일에 `resources :groups` 라는 한 줄이 추가되었습니다.  
+Contact 모델을 만들면서 생긴 것은 모델 파일(`app/models/contacts.rb`) 과 마이그레이션 파일(`db/migrate/dateinfo...create_contacts.rb`), 컨트롤러(`app/controllers/contacts_controller.rb`), 그리고 뷰(`app/views/contacts/index|show|new|edit.html.erb 등등`) 입니다.
+또한, `config/routes.rb` 파일에 `resources :contacts` 라는 한 줄이 추가되었습니다.  
 일반적으로 데이터베이스 CRUD를 수행할 때 필요한 모든 뷰와 라우트, 모델 파일 들을 알아서 만들어주었습니다.  
-다음 시간부터 여러분들은 이러한 것들 하나하나의 개념과 원리를 익히셔야 합니다.
+다음 시간부터 여러분들은 이러한 것들 하나하나의 개념과 원리를 익히셔야 합니다. (더이상 스캐폴드를 쓰지않습니다)
 
 ### 확인해보기
 
@@ -169,38 +172,18 @@ Groups 모델을 만들면서 생긴 것은 모델 파일(`app/models/groups.rb`
 터미널에 `rake routes` 명령어를 통해서 경로들을 확인해볼 수 있습니다.
 
 ```
-       Prefix Verb    URI Pattern            Controller#Action
-  groups_index GET    /groups(.:format)          groups#index
-               POST   /groups(.:format)          groups#create
-    new_groups GET    /groups/new(.:format)      groups#new
-   edit_gropus GET    /groups/:id/edit(.:format) groups#edit
-        groups GET    /groups/:id(.:format)      groups#show
-               PATCH  /groups/:id(.:format)      groups#update
-               PUT    /groups/:id(.:format)      groups#update
-               DELETE /groups/:id(.:format)      groups#destroy
+       Prefix Verb    URI Pattern                Controller#Action
+contacts_index GET    /contacts(.:format)          contacts#index
+               POST   /contacts(.:format)          contacts#create
+  new_contacts GET    /contacts/new(.:format)      contacts#new
+ edit_contacts GET    /contacts/:id/edit(.:format) contacts#edit
+      contacts GET    /contacts/:id(.:format)      contacts#show
+               PATCH  /contacts/:id(.:format)      contacts#update
+               PUT    /contacts/:id(.:format)      contacts#update
+               DELETE /contacts/:id(.:format)      contacts#destroy
 ```
 
-미리보기 주소 창에 `도메인/groups` 를 입력하고 데이터를 쓰고 수정해봅시다.
-
-### Contact 테이블 설계하기
-
-설계할 Contact 테이블은 다음과 같은 요소를 가지고 있어야 합니다.  
-이름(name)과 전화번호(phone_numer), 그리고 각 연락처가 속해있는 group의 아이디(group_id) 입니다.  
-
-| id  | group_id  | name      | phone_number   |
-| --- | --------- | --------- | -------------- |
-| 1   | 1         | 김○○      | 010-1234-5678  |
-| 2   | 1         | 이○○      | 010-1111-2222  |
-| 3   | 1         | 박○○      | 010-2222-3333  |
-
-### Contact 스캐폴드 생성하기
-
-`rails g scaffold Contacts group_id:integer name:string phone_number:string` 명령어를 통해 스캐폴드를 생성합니다.  
-여기서 group_id는 정수(숫자)이기 때문에 integer 타입으로 설정해주었고, 나머지는 255자 이내의 문자열이기 때문에 string 타입을 주었습니다.  
-위에서 groups 스캐폴드를 생성했을 때처럼 contacts에 해당하는 뷰, 컨트롤러, 모델 파일들이 생성됩니다.
-
-미리보기에서 `도메인/contacts` 에 들어가 결과물을 확인해봅시다. 이때, 새로 만드는 연락처의 group_id는 숫자 '1'로 입력해봅니다. 
-
+미리보기 주소 창에 `도메인/contacts` 를 입력하고 데이터를 쓰고 수정해봅시다.
 
 ### 수업 중 과제 (2/2)
 
@@ -210,7 +193,6 @@ Groups 모델을 만들면서 생긴 것은 모델 파일(`app/models/groups.rb`
 class CreateContacts < ActiveRecord::Migration
   def change
     create_table :contacts do |t|
-      t.string :group_id
       t.string :name       
       t.string :phone_number
       
