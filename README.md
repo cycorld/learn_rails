@@ -85,7 +85,7 @@ layout 파일의 위치는 다음과 같습니다. `app/views/layout/application
 컨트롤러를 만들고, index 액션을 만들었습니다. 그리고 그에 대응하는 index.html.erb 라는 뷰파일 또한 만들었습니다.  
 다음으로 해야할 것은 `config/routes.rb` 파일에 경로를 명시해주는 것입니다.  
 Ruby On Rails 에서 routes.rb 파일의 역할은 특정 경로를 컨트롤러의 액션에 매칭시켜서, 그 특정 경로로 클라이언트가 접속했을 때 그 요청을 매칭되어 있는 액션에서 처리하게 됩니다.  
-저희 같은 경우에는 만든 index 액션에서 요청을 처리하도록 해야겠죠.
+우리는 index 액션에서 요청을 처리하도록 해야겠죠.
 
 ```ruby
 Rails.application.routes.draw do
