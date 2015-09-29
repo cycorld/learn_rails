@@ -164,22 +164,56 @@ Groups 모델을 만들면서 생긴 것은 모델 파일(`app/models/groups.rb`
 `rake db:drop` 명령어를 통해서 데이터베이스를 삭제(`db/development.sqlite3`)할 수 있습니다.  
 만약, 마이그레이션 파일을 수정하게 되면 반드시 `rake db:drop`를 수행 후 `rake db:migrate`를 통해 데이터베이스를 다시 생성해주어야 합니다.
 
+**주소 규칙 확인해보기**
+
+터미널에 `rake routes` 명령어를 통해서 경로들을 확인해볼 수 있습니다.
+
+```
+       Prefix Verb    URI Pattern            Controller#Action
+  groups_index GET    /groups(.:format)          groups#index
+               POST   /groups(.:format)          groups#create
+    new_groups GET    /groups/new(.:format)      groups#new
+   edit_gropus GET    /groups/:id/edit(.:format) groups#edit
+        groups GET    /groups/:id(.:format)      groups#show
+               PATCH  /groups/:id(.:format)      groups#update
+               PUT    /groups/:id(.:format)      groups#update
+               DELETE /groups/:id(.:format)      groups#destroy
+```
+
+미리보기 주소 창에 `도메인/groups` 를 입력하고 데이터를 쓰고 수정해봅시다.
+
 ### Contact 테이블 설계하기
 
 설계할 Contact 테이블은 다음과 같은 요소를 가지고 있어야 합니다.  
-이름(name)과 성별(gender) 그리고 전화번호(phone_numer) 입니다.  
+이름(name)과 전화번호(phone_numer), 그리고 각 연락처가 속해있는 group의 아이디(group_id) 입니다.  
+
+| id  | group_id  | name      | phone_number   |
+| --- | --------- | --------- | -------------- |
+| 1   | 1         | 김○○      | 010-1234-5678  |
+| 2   | 1         | 이○○      | 010-1111-2222  |
+| 3   | 1         | 박○○      | 010-2222-3333  |
+
+### Contact 스캐폴드 생성하기
+
+`rails g scaffold Contacts group_id:integer name:string phone_number:string` 명령어를 통해 스캐폴드를 생성합니다.  
+여기서 group_id는 정수(숫자)이기 때문에 integer 타입으로 설정해주었고, 나머지는 255자 이내의 문자열이기 때문에 string 타입을 주었습니다.  
+위에서 groups 스캐폴드를 생성했을 때처럼 contacts에 해당하는 뷰, 컨트롤러, 모델 파일들이 생성됩니다.
+
+미리보기에서 `도메인/contacts` 에 들어가 결과물을 확인해봅시다. 이때, 새로 만드는 연락처의 group_id는 숫자 '1'로 입력해봅니다. 
 
 
+### 수업 중 과제 (2/2)
 
-**db/migrate/날짜...create_people.rb**
+**db/migrate/날짜...create_contacts.rb**
 
 ```ruby
 class CreateContacts < ActiveRecord::Migration
   def change
     create_table :contacts do |t|
-      t.string :name         
-      t.string :gender       
-      t.string :phone_number 
+      t.string :group_id
+      t.string :name       
+      t.string :phone_number
+      
       t.timestamps null: false
     end
   end
@@ -189,147 +223,8 @@ end
 위와 같이 데이터베이스 테이블의 항목을 정의할 수 있습니다. 형식은 다음과 같습니다.  
 `t.데이터타입 :항목이름` => 데이터 타입은 string(문자열), integer(숫자), text(많은 문자열) 등이 있습니다.
 
+** 메모 항목(memo:text)을 추가해 봅시다 **
 
-
-### 컨트롤러 액션 추가, 경로 지정하기
-
-이번 프로젝트에서 만들 기능은 크게 두 가지입니다.  
-- 데이터베이스의 저장되어 있는 Contact 테이블의 정보들을 클라이언트에 보여주는 기능.
-- 정해놓은 특정 Form 형식에 입력하고, 그 내용대로 Contact 테이블에 저장하는 것.
-
-먼저 routes.rb 에 경로를 지정하도록 합니다. `resources` 라는 것을 이용해볼 것 입니다.
-`resources`는 레일즈에서 지원하는 것으로서 이미 정해져 있는 경로를 생성해주는 역할을 합니다.  
-`HttpType '경로' => '컨트롤명러#액션명'` 과 같은 경로들을 여러개 생성해줍니다.
-
-**config/routes.rb**
-
-```ruby
-Rails.application.routes.draw do
-  get '/' => 'contact#index'
-  resources :contact 
-  ...
-  ...
-  ...
-  (생략...)
-```
-
-resources 에 대해서 좀 더 쉽게 이해하기 위해서 사용하기 전과 사용한 후의 비교를 해보도록 합니다.  
-`rake routes` 명령어를 통해서 경로들을 확인해볼 수 있습니다.
-
-**resources 사용 전**
-```
-Prefix Verb URI Pattern Controller#Action
-       GET  /           contact#index
-```
-**resources 사용 후**
-```
-       Prefix Verb   URI Pattern                 Controller#Action
-              GET    /                           contact#index
-contact_index GET    /contact(.:format)          contact#index
-              POST   /contact(.:format)          contact#create
-  new_contact GET    /contact/new(.:format)      contact#new
- edit_contact GET    /contact/:id/edit(.:format) contact#edit
-      contact GET    /contact/:id(.:format)      contact#show
-              PATCH  /contact/:id(.:format)      contact#update
-              PUT    /contact/:id(.:format)      contact#update
-              DELETE /contact/:id(.:format)      contact#destroy
-```
-
-### 기능에 맞춰서 액션 만들기
-
-contact 에 액션을 생성할 것입니다. index 액션은 이미 있으니, new 액션과 create 액션을 새로 추가하도록 합니다.  
-```ruby
-class ContactController < ApplicationController
-    def index
-    end
-    
-    def new     
-       @contact = Contact.new 
-    end        
-    
-    def create 
-    end        
-end
-```
-
-- index 액션  : Contact 테이블의 정보를 보여줄 페이지.  
-- new 액션    : Contact 데이터들을 입력할 페이지.
- - Contact.new(형식 : 모델명.new) 는 테이블의 새로운 데이터를 만들 때 사용하는 메소드입니다. name, gender, phone_number 등의 값들은 비어져 있는 상태입니다. 
-- create 액션 : 새로운 Contact 데이터를 생성할 페이지.
-
-### new page 만들기
-
-※ new 액션의 경로는 resources 에 의해서 정의된 대로 '/contact/new' 입니다.
-일단 뷰파일이 없으니 새로 만들어 주도록 합니다. (`app/views/contact/new.html.erb`)  
-```erb
-<h1>전화번호 추가</h1>
-<%= form_for @contact, url: {action: "create"} do |f| %>
- <label>Name: </label>
- <%= f.text_field :name %><br>
- <label>Gender: </label>
- <%= f.text_field :gender %><br>
- <label>Phone Number: </label>
- <%= f.text_field :phone_number %><br>
- <%= f.submit %>
-<% end %>
-```
-form_for 라는 rails helper 을 이용해여 만듭니다.  
-위 코드는 다음과 같은 html 코드를 생성해냅니다.
-```html
-<form class="new_contact" id="new_contact" action="/contact" accept-charset="UTF-8" method="post">
- <input name="utf8" type="hidden" value="✓">
- <input type="hidden" name="authenticity_token" value="uD3eyX6maEHkSKf4wHeRKS0xvummBe72n2Rzfn2Jks3kd20ccvAmsxRmEmJif7ID9Mh2CtsL9SlVX6Cj4Uaqkg==">
- <label>Name: </label>
- <input type="text" name="contact[name]" id="contact_name"><br>
- <label>Gender: </label>
- <input type="text" name="contact[gender]" id="contact_gender"><br>
- <label>Phone Number: </label>
- <input type="text" name="contact[phone_number]" id="contact_phone_number"><br>
- <input type="submit" name="commit" value="Create Contact">
-</form>
-```
-※ `authenticity_token` 은 보안에 필요한 값입니다.
-
-### create 액션 작성하기
-
-```ruby
-class ContactController < ApplicationController
-    def index
-    end
-    
-    def new
-        @contact = Contact.new
-    end
-    
-    def create
-        name = params[:contact][:name] 
-        gender = params[:contact][:gender] 
-        phone_number = params[:contact][:phone_number] 
-        Contact.create(name: name, gender: gender, phone_number: phone_number) 
-        redirect_to '/'
-    end
-end
-```
-전송된 데이터로 Contact 테이블의 데이터를 생성하고, 그 후에 '/' 경로로 보냅니다.
-
-### index 액션에서 Contact 테이블의 모든 데이터 보여주기
-
-```erb
-<h1> contact 컨트롤러 index 액션의 뷰파일입니다.</h1>
-
-<%= link_to '새 전화번호 등록', new_contact_path %> 
-
-<h3>전화번호부 목록</h3> 
-
-<% @contacts.each do |contact| %> 
-name : <%= contact.name %><br> 
-gender : <%= contact.gender %><br> 
-phone_number : <%= contact.phone_number %><br> 
-<% end %> 
-```
-
-each do 반복문을 이용해서 controller 에서 선언한 @contacts 변수를 이용하여 모든 데이터를 뿌려줍니다.
-
-###과제
-
-토커봇 : https://github.com/kwangkuk0821/talker - CR(Create, Read)
+해당 마이그레이션 파일을 수정한 후 반드시 `rake db:drop`을 수행하고 다시 데이터베이스를 생성해주세요. `rake db:migrate`  
+또한, 비고 항목을 작성하기 위해 뷰 폴더의 _form.html.erb 파일에 textarea를 추가해주셔야 합니다.  
+검색을 통해 한번 해결해보세요!
